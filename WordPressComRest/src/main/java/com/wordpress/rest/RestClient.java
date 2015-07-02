@@ -64,7 +64,24 @@ public class RestClient {
         return request;
     }
 
+    public JsonRestRequest makeRequest(String url, JSONObject params, Listener<JSONObject> listener,
+                                   ErrorListener errorListener) {
+        JsonRestRequest request = new JsonRestRequest(url, params, listener, errorListener);
+        if (mOnAuthFailedListener != null) {
+            request.setOnAuthFailedListener(mOnAuthFailedListener);
+        }
+        request.setUserAgent(mUserAgent);
+        request.setAccessToken(mAccessToken);
+        return request;
+    }
+
     public RestRequest send(RestRequest request) {
+        // Volley send the request
+        mQueue.add(request);
+        return request;
+    }
+
+    public JsonRestRequest sendJson(JsonRestRequest request) {
         // Volley send the request
         mQueue.add(request);
         return request;

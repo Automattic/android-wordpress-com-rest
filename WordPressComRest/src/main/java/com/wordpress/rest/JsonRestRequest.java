@@ -6,32 +6,27 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonObjectRequest;
 
-import org.json.JSONObject;
 import org.json.JSONException;
-
-import java.util.Map;
-import java.util.HashMap;
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
-public class RestRequest extends Request<JSONObject> implements RestInterface {
+public class JsonRestRequest extends JsonObjectRequest implements RestInterface {
 
     private static OnAuthFailedListener mOnAuthFailedListener;
 
-    private final com.android.volley.Response.Listener<JSONObject> mListener;
-    private final Map<String, String> mParams;
+    private final Response.Listener<JSONObject> mListener;
 
-    public RestRequest(int method, String url, Map<String, String> params,
-                       com.android.volley.Response.Listener<JSONObject> listener,
-                       com.android.volley.Response.ErrorListener errorListener) {
-        super(method, url, errorListener);
-        mParams = params;
+    public JsonRestRequest(String url, JSONObject jsonRequest,
+                           Response.Listener<JSONObject> listener,
+                           Response.ErrorListener errorListener) {
+        super(url, jsonRequest, listener, errorListener);
         mListener = listener;
-    }
-
-    public void removeAccessToken() {
-        setAccessToken(null);
+        mHeaders.put("Content-Type", "application/json");
     }
 
     public void setAccessToken(String token) {
@@ -46,7 +41,7 @@ public class RestRequest extends Request<JSONObject> implements RestInterface {
         mHeaders.put(USER_AGENT_HEADER, userAgent);
     }
 
-    public void setOnAuthFailedListener(OnAuthFailedListener onAuthFailedListener) {
+    public void setOnAuthFailedListener(RestRequest.OnAuthFailedListener onAuthFailedListener) {
         mOnAuthFailedListener = onAuthFailedListener;
     }
 
@@ -60,11 +55,6 @@ public class RestRequest extends Request<JSONObject> implements RestInterface {
         if (mListener != null) {
             mListener.onResponse(response);
         }
-    }
-
-    @Override
-    protected Map<String, String> getParams() {
-        return mParams;
     }
 
     @Override
