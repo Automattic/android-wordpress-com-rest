@@ -21,7 +21,6 @@ public class JsonRestRequest extends RestRequest {
         if (jsonRequest != null) {
             mRequestBody = jsonRequest.toString();
         }
-        mListener = listener;
     }
 
     @Override

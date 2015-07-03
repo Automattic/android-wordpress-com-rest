@@ -31,9 +31,9 @@ public class RestRequest extends Request<JSONObject> {
         void onAuthFailed();
     }
 
-    protected com.android.volley.Response.Listener<JSONObject> mListener;
+    private final com.android.volley.Response.Listener<JSONObject> mListener;
     private final Map<String, String> mParams;
-    protected Map<String, String> mHeaders = new HashMap<String, String>(2);
+    private final Map<String, String> mHeaders = new HashMap<String, String>(2);
 
     public RestRequest(int method, String url, Map<String, String> params,
                        com.android.volley.Response.Listener<JSONObject> listener,

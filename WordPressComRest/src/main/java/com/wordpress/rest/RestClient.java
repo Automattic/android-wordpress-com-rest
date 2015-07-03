@@ -86,12 +86,6 @@ public class RestClient {
         return request;
     }
 
-    public JsonRestRequest sendJson(JsonRestRequest request) {
-        // Volley send the request
-        mQueue.add(request);
-        return request;
-    }
-
     public void setOnAuthFailedListener(RestRequest.OnAuthFailedListener onAuthFailedListener) {
         mOnAuthFailedListener = onAuthFailedListener;
     }
