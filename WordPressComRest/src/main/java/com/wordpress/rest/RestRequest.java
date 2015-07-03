@@ -28,7 +28,7 @@ public class RestRequest extends Request<JSONObject> {
     } //This is just a shortcut for Response.ErrorListener
 
     public interface OnAuthFailedListener {
-        public void onAuthFailed();
+        void onAuthFailed();
     }
 
     private final com.android.volley.Response.Listener<JSONObject> mListener;
