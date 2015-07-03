@@ -15,12 +15,25 @@ import java.util.HashMap;
 
 import java.io.UnsupportedEncodingException;
 
-public class RestRequest extends Request<JSONObject> implements RestInterface {
+public class RestRequest extends Request<JSONObject> {
+    public static final String USER_AGENT_HEADER = "User-Agent";
+    public static final String REST_AUTHORIZATION_HEADER = "Authorization";
+    public static final String REST_AUTHORIZATION_FORMAT = "Bearer %s";
 
     private static OnAuthFailedListener mOnAuthFailedListener;
 
-    private final com.android.volley.Response.Listener<JSONObject> mListener;
+    public interface Listener extends Response.Listener<JSONObject> {
+    } //This is just a shortcut for Response.Listener<JSONObject>
+    public interface ErrorListener extends Response.ErrorListener {
+    } //This is just a shortcut for Response.ErrorListener
+
+    public interface OnAuthFailedListener {
+        void onAuthFailed();
+    }
+
+    protected com.android.volley.Response.Listener<JSONObject> mListener;
     private final Map<String, String> mParams;
+    protected Map<String, String> mHeaders = new HashMap<String, String>(2);
 
     public RestRequest(int method, String url, Map<String, String> params,
                        com.android.volley.Response.Listener<JSONObject> listener,
