@@ -16,7 +16,6 @@ repositories {
 }
 
 android {
-    publishNonDefault true
 
     compileSdkVersion 19
     buildToolsVersion "21.1.2"
@@ -32,75 +31,80 @@ dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.16'
 }
 
-
-signing {
-    required {
-        has("release") && project.properties.containsKey("signing.keyId") && project.properties.containsKey("signing.secretKeyRingFile")
-    }
-    sign configurations.archives
-}
-
-
 version android.defaultConfig.versionName
 group = "com.automattic"
 archivesBaseName = "rest"
 
-// http://central.sonatype.org/pages/gradle.html
+afterEvaluate {
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+    configurations {
+        archives {
+            extendsFrom configurations.default
+        }
+    }
 
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: project.properties.ossrhUsername, password: project.properties.ossrhPassword)
-            }
+    signing {
+        sign configurations.archives
+    }
 
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: project.properties.ossrhUsername, password: project.properties.ossrhPassword)
-            }
+    uploadArchives {
+        configuration = configurations.archives
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-            pom.project {
-                name 'WordPressComRest'
-                packaging 'aar'
-                description 'WordPress.com REST Client for Android apps..'
-                url 'https://github.com/Automattic/android-wordpress-com-rest'
-                scm {
-                    connection 'scm:git:https://github.com/Automattic/android-wordpress-com-rest.git'
-                    developerConnection 'scm:git:https://github.com/Automattic/android-wordpress-com-rest.git'
+                if (project.hasProperty("ossrhUsername") && project.hasProperty("ossrhPassword")) {
+                    repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                      authentication(userName: ossrhUsername, password: ossrhPassword)
+                    }
+
+                    snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                      authentication(userName: ossrhUsername, password: ossrhPassword)
+                    }
+                }
+
+                pom.project {
+                    name 'WordPressComRest'
+                    packaging 'aar'
+                    description 'WordPress.com REST Client for Android apps..'
                     url 'https://github.com/Automattic/android-wordpress-com-rest'
-                }
-
-                licenses {
-                    license {
-                        name 'The GPLv2 License'
-                        url 'https://www.gnu.org/licenses/old-licenses/gpl-2.0.html'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id 'daniloercoli'
-                        name 'Danilo Ercoli'
-                        email 'danilo@automattic.com'
+                    scm {
+                        connection 'scm:git:https://github.com/Automattic/android-wordpress-com-rest.git'
+                        developerConnection 'scm:git:https://github.com/Automattic/android-wordpress-com-rest.git'
+                        url 'https://github.com/Automattic/android-wordpress-com-rest'
                     }
 
-                    developer {
-                        id 'beaucollins'
-                        name 'Beau Collins'
-                        email 'robert@automattic.com'
+                    licenses {
+                        license {
+                            name 'The GPLv2 License'
+                            url 'https://www.gnu.org/licenses/old-licenses/gpl-2.0.html'
+                        }
                     }
 
-                    developer {
-                        id 'roundhill'
-                        name 'Dan Roundhill'
-                        email 'dan@automattic.com'
-                    }
+                    developers {
+                        developer {
+                            id 'daniloercoli'
+                            name 'Danilo Ercoli'
+                            email 'danilo@automattic.com'
+                        }
 
-                    developer {
-                        id 'maxme'
-                        name 'Maxime Biais'
-                        email 'maxime@automattic.com'
+                        developer {
+                            id 'beaucollins'
+                            name 'Beau Collins'
+                            email 'robert@automattic.com'
+                        }
+
+                        developer {
+                            id 'roundhill'
+                            name 'Dan Roundhill'
+                            email 'dan@automattic.com'
+                        }
+
+                        developer {
+                            id 'maxme'
+                            name 'Maxime Biais'
+                            email 'maxime@automattic.com'
+                        }
                     }
                 }
             }
