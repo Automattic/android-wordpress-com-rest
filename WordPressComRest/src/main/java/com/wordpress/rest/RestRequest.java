@@ -7,6 +7,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
 
@@ -111,7 +112,16 @@ public class RestRequest extends Request<JSONObject> {
     protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
         try {
             String jsonString = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-            return Response.success(new JSONObject(jsonString), HttpHeaderParser.parseCacheHeaders(response));
+
+            try {
+                return Response.success(new JSONObject(jsonString), HttpHeaderParser.parseCacheHeaders(response));
+            } catch (JSONException parseErr) {
+                // Try to parse the response document as Array
+                JSONArray responseArray = new JSONArray(jsonString);
+                JSONObject wrapper = new JSONObject();
+                wrapper.put("originalResponse", responseArray);
+                return Response.success(wrapper, HttpHeaderParser.parseCacheHeaders(response));
+            }
         } catch (UnsupportedEncodingException e) {
             return Response.error(new ParseError(e));
         } catch (JSONException je) {
