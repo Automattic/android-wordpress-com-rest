@@ -1,5 +1,6 @@
 package com.wordpress.rest;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
@@ -36,11 +37,43 @@ public class RestRequest extends Request<JSONObject> {
     private final Map<String, String> mParams;
     private final Map<String, String> mHeaders = new HashMap<String, String>(2);
 
+    private final byte[] mMultipartBody;
+    private final String mBodyContentType;
+
+    /**
+     * Prepare a REST request based on URL-encoded form data
+     * @param method HTTP method to execute
+     * @param url the URL to execute the request against
+     * @param params the map of form data pairs to encode
+     * @param listener the listener for successful completion
+     * @param errorListener the listener for failed completion
+     */
     public RestRequest(int method, String url, Map<String, String> params,
                        com.android.volley.Response.Listener<JSONObject> listener,
                        com.android.volley.Response.ErrorListener errorListener) {
         super(method, url, errorListener);
         mParams = params;
+        mMultipartBody = null;
+        mBodyContentType = null;
+        mListener = listener;
+    }
+
+    /**
+     * Prepare a REST request based on MultiPart form data
+     * @param method HTTP method to execute
+     * @param url the URL to execute the request against
+     * @param multipartBody the byte array of the body
+     * @param bodyContentType the body content type including the parts boundary string
+     * @param listener the listener for successful completion
+     * @param errorListener the listener for failed completion
+     */
+    public RestRequest(int method, String url, byte[] multipartBody, String bodyContentType,
+                       com.android.volley.Response.Listener<JSONObject> listener,
+                       com.android.volley.Response.ErrorListener errorListener) {
+        super(method, url, errorListener);
+        mParams = null;
+        mMultipartBody = multipartBody;
+        mBodyContentType = bodyContentType;
         mListener = listener;
     }
 
@@ -62,6 +95,16 @@ public class RestRequest extends Request<JSONObject> {
 
     public void setOnAuthFailedListener(OnAuthFailedListener onAuthFailedListener) {
         mOnAuthFailedListener = onAuthFailedListener;
+    }
+
+    @Override
+    public byte[] getBody() throws AuthFailureError {
+        return (mMultipartBody == null ? super.getBody() : mMultipartBody);
+    }
+
+    @Override
+    public String getBodyContentType() {
+        return (mBodyContentType == null ? super.getBodyContentType() : mBodyContentType);
     }
 
     @Override
