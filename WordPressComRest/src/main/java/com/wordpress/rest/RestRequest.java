@@ -20,6 +20,7 @@ public class RestRequest extends Request<JSONObject> {
     public static final String USER_AGENT_HEADER = "User-Agent";
     public static final String REST_AUTHORIZATION_HEADER = "Authorization";
     public static final String REST_AUTHORIZATION_FORMAT = "Bearer %s";
+    public static final String ORIGINAL_RESPONSE = "originalResponse";
 
     private static OnAuthFailedListener mOnAuthFailedListener;
 
@@ -113,19 +114,50 @@ public class RestRequest extends Request<JSONObject> {
         try {
             String jsonString = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
 
+            JSONObject jsonObject;
             try {
-                return Response.success(new JSONObject(jsonString), HttpHeaderParser.parseCacheHeaders(response));
-            } catch (JSONException parseErr) {
-                // Try to parse the response document as Array
-                JSONArray responseArray = new JSONArray(jsonString);
-                JSONObject wrapper = new JSONObject();
-                wrapper.put("originalResponse", responseArray);
-                return Response.success(wrapper, HttpHeaderParser.parseCacheHeaders(response));
+                jsonObject = jsonObjectFromResponse(jsonString);
+            } catch (JSONException jsonException) {
+                try {
+                    jsonObject = jsonArrayObjectFromResponse(jsonString);
+                } catch (JSONException jsonArrayException) {
+                    try {
+                        jsonObject = jsonBooleanObjectFromResponse(jsonString);
+                    } catch (JSONException jsonBooleanException) {
+                        return Response.error(new ParseError(jsonBooleanException));
+                    }
+                }
             }
+
+            return Response.success(jsonObject, HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {
             return Response.error(new ParseError(e));
-        } catch (JSONException je) {
-            return Response.error(new ParseError(je));
+        }
+    }
+
+    protected JSONObject jsonObjectFromResponse(String jsonString) throws JSONException {
+        return new JSONObject(jsonString);
+    }
+
+    protected JSONObject jsonArrayObjectFromResponse(String jsonString) throws JSONException {
+        JSONArray responseArray = new JSONArray(jsonString);
+        JSONObject wrapper = new JSONObject();
+        wrapper.put(ORIGINAL_RESPONSE, responseArray);
+
+        return wrapper;
+    }
+
+    protected JSONObject jsonBooleanObjectFromResponse(String jsonString) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+
+        if (jsonString.equals(Boolean.TRUE.toString())) {
+            jsonObject.put(ORIGINAL_RESPONSE, true);
+            return jsonObject;
+        } else if (jsonString.equals(Boolean.FALSE.toString())) {
+            jsonObject.put(ORIGINAL_RESPONSE, false);
+            return jsonObject;
+        } else {
+            throw new JSONException("Not a boolean");
         }
     }
 }
