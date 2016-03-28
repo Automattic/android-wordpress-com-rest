@@ -20,7 +20,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        versionName "1.0.3"
+        versionName "1.0.4"
         minSdkVersion 14
         targetSdkVersion 23
     }
@@ -103,6 +103,12 @@ afterEvaluate {
                             id 'maxme'
                             name 'Maxime Biais'
                             email 'maxime@automattic.com'
+                        }
+
+                        developer {
+                            id 'kwonye'
+                            name 'Will Kwon'
+                            email 'will@automattic.com'
                         }
                     }
                 }
