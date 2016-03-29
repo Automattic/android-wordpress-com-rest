@@ -13,6 +13,16 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class RestRequestTest extends AndroidTestCase {
+    private File mTempFile;
+
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+
+        if (mTempFile != null) {
+            mTempFile.delete();
+        }
+    }
 
     public void testMultiPartBodyAndContentType() throws AuthFailureError {
         final String bodyStr = "request body";
@@ -50,14 +60,14 @@ public class RestRequestTest extends AndroidTestCase {
     public void testMultiPartBuilderFile() throws AuthFailureError, IOException {
         final byte[] bytes = new byte[] {5, 6, 7, 8, 9, 10};
 
-        File tempFile = new File(getContext().getCacheDir(), "tempFile.jpg");
-        FileOutputStream fos = new FileOutputStream(tempFile);
+        mTempFile = new File(getContext().getCacheDir(), "tempFile.jpg");
+        FileOutputStream fos = new FileOutputStream(mTempFile);
         fos.write(bytes);
         fos.flush();
         fos.close();
 
         MultipartRequestBuilder mpb = new MultipartRequestBuilder();
-        mpb.addPart("data", tempFile);
+        mpb.addPart("data", mTempFile);
         RestRequest restRequest = mpb.build("http://url");
 
         // See "7.2.1 Multipart: The common syntax" at https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html
@@ -67,7 +77,7 @@ public class RestRequestTest extends AndroidTestCase {
 
         String expected =
                 encapsulationBoundary + lineEnd
-                + "Content-Disposition: form-data; name=\"data\"; filename=\"" + tempFile.getName() + "\"" + lineEnd
+                + "Content-Disposition: form-data; name=\"data\"; filename=\"" + mTempFile.getName() + "\"" + lineEnd
                 + lineEnd
                 + new String(bytes)
                 + lineEnd
