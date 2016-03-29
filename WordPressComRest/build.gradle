@@ -105,6 +105,12 @@ afterEvaluate {
                             name 'Maxime Biais'
                             email 'maxime@automattic.com'
                         }
+
+                        developer {
+                            id 'hypest'
+                            name 'Stefanos Togoulidis'
+                            email 'stefanos.togoulidis@automattic.com'
+                        }
                     }
                 }
             }
