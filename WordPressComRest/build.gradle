@@ -4,12 +4,13 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.5.0'
+        classpath 'com.novoda:bintray-release:0.3.4'
     }
 }
 
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
-apply plugin: 'signing'
+apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
 
 repositories {
     jcenter()
@@ -30,89 +31,15 @@ dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.16'
 }
 
-version android.defaultConfig.versionName
-group = "com.automattic"
-archivesBaseName = "rest"
-
-afterEvaluate {
-
-    configurations {
-        archives {
-            extendsFrom configurations.default
-        }
-    }
-
-    signing {
-        sign configurations.archives
-    }
-
-    uploadArchives {
-        configuration = configurations.archives
-        repositories {
-            mavenDeployer {
-                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-                if (project.hasProperty("ossrhUsername") && project.hasProperty("ossrhPassword")) {
-                    repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                      authentication(userName: ossrhUsername, password: ossrhPassword)
-                    }
-
-                    snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                      authentication(userName: ossrhUsername, password: ossrhPassword)
-                    }
-                }
-
-                pom.project {
-                    name 'WordPressComRest'
-                    packaging 'aar'
-                    description 'WordPress.com REST Client for Android apps..'
-                    url 'https://github.com/Automattic/android-wordpress-com-rest'
-                    scm {
-                        connection 'scm:git:https://github.com/Automattic/android-wordpress-com-rest.git'
-                        developerConnection 'scm:git:https://github.com/Automattic/android-wordpress-com-rest.git'
-                        url 'https://github.com/Automattic/android-wordpress-com-rest'
-                    }
-
-                    licenses {
-                        license {
-                            name 'The GPLv2 License'
-                            url 'https://www.gnu.org/licenses/old-licenses/gpl-2.0.html'
-                        }
-                    }
-
-                    developers {
-                        developer {
-                            id 'daniloercoli'
-                            name 'Danilo Ercoli'
-                            email 'danilo@automattic.com'
-                        }
-
-                        developer {
-                            id 'beaucollins'
-                            name 'Beau Collins'
-                            email 'robert@automattic.com'
-                        }
-
-                        developer {
-                            id 'roundhill'
-                            name 'Dan Roundhill'
-                            email 'dan@automattic.com'
-                        }
-
-                        developer {
-                            id 'maxme'
-                            name 'Maxime Biais'
-                            email 'maxime@automattic.com'
-                        }
-
-                        developer {
-                            id 'kwonye'
-                            name 'Will Kwon'
-                            email 'will@automattic.com'
-                        }
-                    }
-                }
-            }
-        }
-    }
+publish {
+    artifactId = 'rest'
+    userOrg = 'automattic'
+    groupId = 'com.automattic'
+    uploadName = 'rest'
+    description = 'WordPress.com REST Client for Android apps'
+    publishVersion = '1.0.4'
+    licences = ['MIT', 'GPL']
+    website = 'https://github.com/Automattic/android-wordpress-com-rest'
+    dryRun = 'false'
+    autoPublish = 'true'
 }
