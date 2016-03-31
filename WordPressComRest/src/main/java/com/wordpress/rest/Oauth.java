@@ -65,11 +65,13 @@ public class Oauth {
         return String.format(AUTHORIZED_ENDPOINT_FORMAT, AUTHORIZE_ENDPOINT, getAppID(), getAppRedirectURI());
     }
 
+    @SuppressWarnings("unused")
     public Request makeRequest(String username, String password, String twoStepCode, boolean shouldSendTwoStepSMS, Listener listener, ErrorListener errorListener) {
         return new PasswordRequest(getAppID(), getAppSecret(), getAppRedirectURI(), username, password, twoStepCode, shouldSendTwoStepSMS, listener,
                 errorListener);
     }
 
+    @SuppressWarnings("unused")
     public Request makeRequest(String code, Listener listener, ErrorListener errorListener) {
         return new BearerRequest(getAppID(), getAppSecret(), getAppRedirectURI(), code, listener, errorListener);
     }

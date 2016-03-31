@@ -1,9 +1,9 @@
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.1.0'
+        classpath 'com.android.tools.build:gradle:1.5.0'
     }
 }
 
@@ -12,18 +12,17 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 android {
-
-    compileSdkVersion 19
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
-        versionName "1.0.3"
+        versionName "1.0.4"
         minSdkVersion 14
-        targetSdkVersion 20
+        targetSdkVersion 23
     }
 }
 
@@ -104,6 +103,12 @@ afterEvaluate {
                             id 'maxme'
                             name 'Maxime Biais'
                             email 'maxime@automattic.com'
+                        }
+
+                        developer {
+                            id 'kwonye'
+                            name 'Will Kwon'
+                            email 'will@automattic.com'
                         }
                     }
                 }
