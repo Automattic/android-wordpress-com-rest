@@ -157,7 +157,7 @@ public class RestRequest extends Request<JSONObject> {
             jsonObject.put(ORIGINAL_RESPONSE, false);
             return jsonObject;
         } else {
-            throw new JSONException("Not a boolean");
+            throw new JSONException("Not a valid JSON response: " + jsonString);
         }
     }
 }
