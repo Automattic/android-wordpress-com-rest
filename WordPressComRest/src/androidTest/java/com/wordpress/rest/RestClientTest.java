@@ -3,7 +3,7 @@ package com.wordpress.rest;
 import android.test.AndroidTestCase;
 
 public class RestClientTest extends AndroidTestCase {
-    public void testGetAbsoluteURLWithLeadingSlash(){
+    public void testGetAbsoluteURLWithLeadingSlash() {
         String path = "/sites/mobileprojects.wordpress.com/posts";
         RestClient restClient = new RestClient(null);
         String url = restClient.getAbsoluteURL(path);
