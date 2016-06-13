@@ -121,7 +121,9 @@ public class RestClient {
                     query.append(URLEncoder.encode(entry.getValue(), PARAMS_ENCODING));
                     query.append("&");
                 }
-                if (query.length() > 0) query.deleteCharAt(query.length()-1);
+                if (query.length() > 0) {
+                    query.deleteCharAt(query.length() - 1);
+                }
             } catch (UnsupportedEncodingException uee) {
                 throw new RuntimeException("Encoding not supported: " + PARAMS_ENCODING, uee);
             }
