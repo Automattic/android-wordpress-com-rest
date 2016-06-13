@@ -21,7 +21,7 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        versionName "1.0.5"
+        versionName "1.0.6"
         minSdkVersion 14
         targetSdkVersion 23
     }
@@ -37,7 +37,7 @@ publish {
     groupId = 'com.automattic'
     uploadName = 'rest'
     description = 'WordPress.com REST Client for Android apps'
-    publishVersion = '1.0.5'
+    publishVersion = '1.0.6'
     licences = ['MIT', 'GPL']
     website = 'https://github.com/Automattic/android-wordpress-com-rest'
     dryRun = 'false'
