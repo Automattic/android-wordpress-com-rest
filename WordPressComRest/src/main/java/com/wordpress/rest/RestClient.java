@@ -127,7 +127,12 @@ public class RestClient {
             } catch (UnsupportedEncodingException uee) {
                 throw new RuntimeException("Encoding not supported: " + PARAMS_ENCODING, uee);
             }
-            url = String.format("%s?%s", url, query);
+
+            if (url.contains("?")) {
+                url = String.format("%s&%s", new Object[]{url, query});
+            } else {
+                url = String.format("%s?%s", new Object[]{url, query});
+            }
         }
         return url;
     }
