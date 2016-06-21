@@ -37,7 +37,7 @@ publish {
     groupId = 'com.automattic'
     uploadName = 'rest'
     description = 'WordPress.com REST Client for Android apps'
-    publishVersion = '1.0.6'
+    publishVersion = '1.0.7'
     licences = ['MIT', 'GPL-2.0']
     website = 'https://github.com/Automattic/android-wordpress-com-rest'
     dryRun = 'false'
