@@ -10,17 +10,21 @@ This will create an `aar` package at this location: `WordPressComRest/build/outp
 
 ## Usage
 
-If you don't want to compile and host it. The easiest way to use it in your Android project is to add it as a library in your build.gradle file, don't forget to add the wordpress-mobile maven repository. For instance:
+If you don't want to compile and host it, the easiest way to use it in your Android project is to add it as a library in your `build.gradle` file:
 
-    repositories {
-        maven { url 'http://wordpress-mobile.github.io/WordPress-Android' }
-    }
+```groovy
+dependencies {
+    // use the latest 1.x version
+    compile 'com.automattic:rest:1.+'
+}
+```
 
-    dependencies {
-        // use the latest 1.x version
-        compile 'com.automattic:wordpresscom-rest:1.+'
-    }
+## Publish it to bintray
+
+```shell
+$ ./gradlew assemble publishToMavenLocal bintrayUpload -PbintrayUser=FIXME -PbintrayKey=FIXME -PdryRun=false
+```
 
 ## LICENSE
 
-This library is dual licensed unded MIT and GPL v2.
+This library is dual licensed under MIT and GPL v2.
