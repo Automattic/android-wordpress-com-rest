@@ -1,3 +1,10 @@
+* * *
+
+**Not Maintained!**
+*This project is no longer being actively maintained. Use at your own risk!*
+
+* * *
+
 # WordPress REST Client for Android
 
 ## Build
