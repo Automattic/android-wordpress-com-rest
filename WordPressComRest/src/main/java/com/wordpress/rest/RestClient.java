@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class RestClient {
     public static final String TAG = "WordPressREST";
-    public static enum REST_CLIENT_VERSIONS {V0, V1, V1_1, V1_2, V1_3}
+    public static enum REST_CLIENT_VERSIONS {V0, V1, V1_1, V1_2, V1_3, V2}
     public static final String PARAMS_ENCODING = "UTF-8";
 
     protected static final String REST_API_ENDPOINT_URL_V0 = "https://public-api.wordpress.com/";
@@ -21,6 +21,7 @@ public class RestClient {
     protected static final String REST_API_ENDPOINT_URL_V1_1 = "https://public-api.wordpress.com/rest/v1.1/";
     protected static final String REST_API_ENDPOINT_URL_V1_2 = "https://public-api.wordpress.com/rest/v1.2/";
     protected static final String REST_API_ENDPOINT_URL_V1_3 = "https://public-api.wordpress.com/rest/v1.3/";
+    protected static final String REST_API_ENDPOINT_URL_V2 = "https://public-api.wordpress.com/wpcom/v2/";
 
     private RequestQueue mQueue;
     private String mAccessToken;
@@ -35,7 +36,9 @@ public class RestClient {
     public RestClient(RequestQueue queue, REST_CLIENT_VERSIONS version) {
         mQueue = queue;
 
-        if (version == REST_CLIENT_VERSIONS.V1_3) {
+        if (version == REST_CLIENT_VERSIONS.V2) {
+            mRestApiEndpointURL = REST_API_ENDPOINT_URL_V2;
+        } else if (version == REST_CLIENT_VERSIONS.V1_3) {
             mRestApiEndpointURL = REST_API_ENDPOINT_URL_V1_3;
         } else if (version == REST_CLIENT_VERSIONS.V1_2) {
             mRestApiEndpointURL = REST_API_ENDPOINT_URL_V1_2;
